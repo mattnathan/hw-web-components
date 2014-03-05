@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Web Components Example</title>
+  <script>
+    (function() {
+      document.registerElement("name-tag", {
+        prototype: Object.create(HTMLElement.prototype, {
+          createdCallback: {
+            value: function() {
+              var template = document.getElementById("NameTag");
+              // the webkit prefix should disappear once https://code.google.com/p/chromium/issues/detail?id=336121
+              // lands in chrome 35
+              this.webkitCreateShadowRoot().appendChild(document.importNode(template.content, true));
+            }
+          }
+        })
+      })
+    })();
+  </script>
+</head>
+<body>
+<h1>This is a web components test</h1>
+
+<name-tag>Matt Nathan</name-tag>
+<name-tag>Pete</name-tag>
+
+<template id="NameTag">
+  <style>
+    /*
+    the :host selector only works with the experimental web features turned on in chrome. I expect this to change once
+    https://code.google.com/p/chromium/issues/detail?id=336121 lands in chrome 35
+    */
+    :host {
+      background: red;
+      width: 20em;
+      display: inline-block;
+      border-radius: 0.5em;
+      border: 1px solid rgb(138, 0, 0);
+      overflow: hidden;
+      box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.6), inset 0 0 0 1px white;
+      position: relative;
+    }
+
+    header, footer {
+      color: white;
+      font-weight: bold;
+      padding: 0.6em 1em;
+    }
+
+    p {
+      padding: 1em;
+      font-size: 1.5em;
+      margin: 0;
+      background: white;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+
+  <div>
+    <header>Hello, my name is</header>
+    <p>
+      <content />
+    </p>
+    <footer>&nbsp;</footer>
+  </div>
+</template>
+</body>
+</html>
